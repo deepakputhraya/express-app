@@ -22,6 +22,14 @@ app.get('/headers', (req, res) => {
     })
 })
 
+app.get('/auth', (req, res) => {
+   logger.info({headers: req.headers});
+   if (!req.headers['x-api-key']) {
+       return res.status(400).send({success: false});
+   }
+   res.send({success: true})
+});
+
 app.listen(port, () => {
     logger.info('Server running on port %d', port);
 })
