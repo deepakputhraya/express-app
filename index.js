@@ -55,6 +55,17 @@ app.get('/test-header', (req, res) => {
     return res.status(400).send({success: false});
  });
 
+ app.get('/test-multiheader', (req, res) => {
+    logger.info({headers: req.headers});
+    if (!req.headers['x-header-only']){
+        return res.status(400).send({success: false});
+    }
+    if (!req.headers['x-header-value'] && !req.headers['x-header-value'] == '123' ){
+        return res.status(400).send({success: false});
+    }
+    res.send({success: true})
+ });
+
 app.listen(port, () => {
     logger.info('Server running on port %d', port);
 })
