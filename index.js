@@ -8,6 +8,8 @@ const expressLogger = expressPino({ logger });
 const app = express()
 const port = process.env.PORT || 3000
 
+const statusCodes = [101, 200, 201, 300, 305, 400, 401, 404, 405, 500, 503]
+
 app.use(expressLogger);
 
 app.get('/ping', (req, res) => {
@@ -34,8 +36,8 @@ app.get('/auth', (req, res) => {
 app.get('/test-secret', (req, res) => {
     logger.info({headers: req.headers});
     if (req.headers['x-secret'] && req.headers['x-secret'].startsWith('<<<')) {
-        console.log('Secret True')
-        console.log(req.headers)
+        logger.info('Secret True')
+        logger.info(req.headers)
         return res.send({success: true})
     }
     return res.status(400).send({success: false});
@@ -44,12 +46,12 @@ app.get('/test-secret', (req, res) => {
 app.get('/test-header', (req, res) => {
     logger.info({headers: req.headers});
     if (req.headers['x-header-only']){
-        console.log('Header Only')
-        console.log(req.headers)
+        logger.info('Header Only')
+        logger.info(req.headers)
         return res.send({success: true})
     } else if (req.headers['x-header-value'] && req.headers['x-header-value'] == '123' ){
-        console.log('Header and Value')
-        console.log(req.headers)
+        logger.info('Header and Value')
+        logger.info(req.headers)
         return res.send({success: true})
     }
     return res.status(400).send({success: false});
@@ -64,6 +66,20 @@ app.get('/test-header', (req, res) => {
         return res.status(400).send({success: false});
     }
     res.send({success: true})
+ });
+
+ app.post('/events', (req, res) => {
+    if(req.query.status === 'random') {
+        const code = statusCodes[Math.floor(statusCodes.length * Math.random())]
+        res.status(code).send({success: true, code})
+        return
+    }
+    if(req.query.status) {
+        const code = req.query.status
+        res.status(code).send({success: true, code})
+        return
+    }
+    res.send({success: true, 'message': 'no query params. default response'})
  });
 
 app.listen(port, () => {
