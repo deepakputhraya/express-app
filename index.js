@@ -80,7 +80,7 @@ app.get('/test-header', (req, res) => {
         res.status(code).send({success: true, code})
         return
     }
-    logger.info({msg: 'Request body', reqBody: req.body})
+    logger.info({msg: 'Request body', reqBody: req.body, headers: req.headers})
     res.send({success: true, 'message': 'no query params. default response'})
  });
 
