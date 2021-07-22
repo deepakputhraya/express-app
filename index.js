@@ -2,7 +2,6 @@ const express = require('express')
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
 const e = require('express');
-const bodyParser = require('body-parser')
 
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 const expressLogger = expressPino({ logger });
@@ -12,7 +11,7 @@ const port = process.env.PORT || 3000
 const statusCodes = [101, 200, 201, 300, 305, 400, 401, 404, 405, 500, 503]
 
 app.use(expressLogger);
-app.use(bodyParser.json())
+app.use(express.json()) // for parsing application/json
 
 app.get('/ping', (req, res) => {
     res.send({
