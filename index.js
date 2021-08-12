@@ -21,13 +21,17 @@ app.get('/ping', (req, res) => {
 
 app.get('/delay', (req, res) => {
     logger.info({headers: req.headers});
-    let delay = req.query.delay ? req.query.delay : 2000
+    if (!req.headers['x-delay']) {
+       return res.status(200).send({success: true});
+   } else {
+       let delay = req.headers['x-delay']
     setTimeout((() => {
         res.send({
             delay: delay,
             headers : req.headers
     	})
     }), delay)
+   }
 })
 
 app.get('/headers', (req, res) => {
