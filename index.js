@@ -99,6 +99,17 @@ app.get('/test-header', (req, res) => {
     res.send({success: true, 'message': 'no query params. default response'})
  });
 
+app.get('/delay-query', (req, res) => {
+    logger.info({headers: req.headers});
+    let delay = req.query.delay ? req.query.delay : 2000
+    setTimeout((() => {
+        res.send({
+            delay: delay,
+            headers : req.headers
+    	})
+    }), delay)
+})
+
 app.listen(port, () => {
     logger.info('Server running on port %d', port);
 })
