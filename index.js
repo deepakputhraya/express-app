@@ -110,6 +110,14 @@ app.get('/delay-query', (req, res) => {
     }), delay)
 })
 
+app.post('/samplepost', (req,res) => {
+    logger.info({headers: req.headers});
+    
+    return res.json({"status":{"code":200}}).status(200);
+})
+
+
+
 app.listen(port, () => {
     logger.info('Server running on port %d', port);
 })
